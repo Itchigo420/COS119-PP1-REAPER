@@ -1,59 +1,56 @@
-# 🚀 Welcome to Project & Portfolio!
+# Project & Portfolio I - REAPER
 
-This repository will be used to keep track of research and development conducted in this class. Follow the instructions below to get started.
-cos
-### Getting Started
+## Student
 
-**1.** Review the [About](./docs/01_about/README.md) README and all of the links it provides.
+Dustin Summerour - Simulation Engineering student at Full Sail University.
 
-**2.** Review the documentation and [Getting Started](./docs/02_getting_started/README.md) steps in this repository's docs folder.
+## Project Overview
 
-**3.** Attend the first Live Lecture to see a live setup demo. If you are unable to attend, make sure to watch the archive.
+REAPER is a C++ console application being developed throughout Project & Portfolio I. The project uses a small task-management console as the Week 1 foundation so the application has a clear object-oriented structure that can be expanded into additional REAPER system-management features during later milestones.
 
-### Next Steps...
+The Week 1 build supports creating tasks, viewing current tasks, marking tasks complete, and safely exiting the program.
 
-After completing the above steps, feel free to begin updating this readme where indicated below. Remember to update this document each week to receive proper credit for the weekly Milestone assignment.
+## Repository Structure
 
-<br>
+- `dev/` - C++ source code and build configuration
+- `docs/` - course documentation and milestone planning
+- `README.md` - project overview and weekly stand-ups
 
-> ❗️ &nbsp; Now that you have read to this point, go ahead and delete this sentence and everything above it.
+## Build
 
-<br>
+The source uses C++17 and can be built with CMake or a C++17 compiler.
 
-# Project & Portfolio 1
+```bash
+cmake -S dev -B build
+cmake --build build
+```
 
-### Student First & Last Name
+Or with g++:
 
-Hello my name is [enter name]. I am a student from [where are you from?]. The purpose of this repository is to practice development using version control. This work will help me begin to build a portfolio of skills and accomplishment that can be shared in the future.
+```bash
+g++ -std=c++17 -Idev/include dev/src/*.cpp -o reaper
+```
 
-<br>
-
-## 📢 &nbsp; Weekly Stand Up
-
-Each week I will summarize my milestone activity and progress by writing a stand-up. A stand-up is meant to be a succinct update on how things are going. Use these prompts as a guide on what to write about:
-
-⚙️ Overview - What I worked on this past week
-<br>
-🌵 Challenges - What problems did I have & how I'm addressing them
-<br>
-🏆 Accomplishments - What is something I "leveled up" on this week
-<br>
-🔮 Next Steps - What I plan to prioritize and do next
-
-<br>
+## Weekly Stand Up
 
 ### Week 1
 
-Replace this paragraph with your stand up for this week. Use the prompts above to summarize your most recent milestone activity and work.
+**Overview:** This week I set up the GitHub repository, development workflow, Project board, and the first working C++ foundation for REAPER. I organized the application around `Task`, `TaskManager`, and `UserInterface` classes and created a menu loop that can add, display, and complete tasks.
+
+**Challenges:** The biggest challenge was deciding how much of the larger REAPER idea should be included in the first milestone without making the project too large too early. I addressed that by keeping Week 1 focused on a small working console foundation with clear class responsibilities and leaving later features in the backlog.
+
+**Accomplishments:** I improved the project structure by separating data, application logic, and console interaction into different classes. I also used the GitHub `dev` workflow and verified that the current build compiles and runs successfully.
+
+**Next Steps:** Next week I plan to expand the REAPER features while keeping the code organized. The current backlog includes simulated system-status monitoring, file save/load support, pointer and memory-management work, testing, and refactoring.
 
 ### Week 2
 
-My next stand up will go here...
+My next stand-up will go here.
 
 ### Week 3
 
-Stay tuned, this stand up is coming soon...
+My Week 3 stand-up will go here.
 
 ### Week 4
 
-My final stand up...
+My final stand-up will go here.
