@@ -79,3 +79,27 @@ This workflow keeps the local repository connected to GitHub while preserving a 
 
 - **What other file or folder would you want to add to a `.gitignore` file and why?**  
   For a Visual Studio C++ project, I would ignore folders such as `.vs/`, `Debug/`, `Release/`, `x64/`, and compiled files such as `*.obj` and `*.exe`. These are generated automatically during development and builds, so tracking them would make the repository larger and create unnecessary changes. I would also ignore files such as `.env` if they contain local configuration or secrets.
+
+<br>
+
+# Reference Links
+
+The most useful resources this week were the official Git documentation and the GitHub documentation because they explain both the commands themselves and the workflow around repositories, remotes, authentication, and ignored files. The GNU Bash/Coreutils documentation was also useful for confirming the behavior of common terminal commands.
+
+**Terminal Commands**  
+[GNU Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)  
+[GNU Coreutils Manual](https://www.gnu.org/software/coreutils/manual/coreutils.html)
+
+**Three Types of Version Control**  
+[Git - About Version Control](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control)
+
+**Git Commands**  
+[Git Reference Documentation](https://git-scm.com/docs)
+
+**Connecting to GitHub Using Terminal**  
+[GitHub Docs - Cloning a Repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)  
+[GitHub Docs - About Authentication to GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github)
+
+**Using `.gitignore` and Why It Is Important**  
+[Git - gitignore Documentation](https://git-scm.com/docs/gitignore)  
+[GitHub Docs - Ignoring Files](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files)
