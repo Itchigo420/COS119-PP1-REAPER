@@ -10,6 +10,10 @@ The Week 1 C++ implementation lives in this directory.
 - `src/` - class implementations and `main.cpp`
 - `CMakeLists.txt` - CMake build configuration
 
+## Build with Visual Studio
+
+Open `REAPER.sln` in Visual Studio and build the `Debug|x64` or `Release|x64` configuration. The solution includes all Week 1 source and header files.
+
 ## Build with CMake
 
 ```bash
