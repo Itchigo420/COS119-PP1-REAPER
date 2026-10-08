@@ -51,8 +51,25 @@ void UserInterface::addTask() {
         return;
     }
 
-    const int id = manager_.addTask(title);
-    std::cout << "Added task #" << id << ".\n";
+    std::cout << "Priority (1 = Low, 2 = Medium, 3 = High): ";
+    int priorityChoice = 0;
+    if (!(std::cin >> priorityChoice)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Enter a valid priority number.\n";
+        return;
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    if (priorityChoice < 1 || priorityChoice > 3) {
+        std::cout << "Priority must be 1, 2, or 3.\n";
+        return;
+    }
+
+    const Priority priority = static_cast<Priority>(priorityChoice);
+    const int id = manager_.addTask(title, priority);
+    std::cout << "Added task #" << id << " with "
+              << priorityToString(priority) << " priority.\n";
 }
 
 void UserInterface::listTasks() const {
@@ -64,7 +81,8 @@ void UserInterface::listTasks() const {
     std::cout << "\nCurrent tasks:\n";
     for (const Task& task : manager_.getTasks()) {
         std::cout << '[' << (task.isComplete() ? 'X' : ' ') << "] #"
-                  << task.getId() << " - " << task.getTitle() << '\n';
+                  << task.getId() << " [" << priorityToString(task.getPriority())
+                  << "] - " << task.getTitle() << '\n';
     }
 }
 

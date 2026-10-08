@@ -1,7 +1,7 @@
 #include "TaskManager.h"
 
-int TaskManager::addTask(const std::string& title) {
-    tasks_.emplace_back(nextId_, title);
+int TaskManager::addTask(const std::string& title, Priority priority) {
+    tasks_.emplace_back(nextId_, title, priority);
     return nextId_++;
 }
 
