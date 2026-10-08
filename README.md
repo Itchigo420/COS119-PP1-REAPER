@@ -8,7 +8,17 @@ Dustin Summerour - Simulation Engineering student at Full Sail University.
 
 REAPER is a C++ console application being developed throughout Project & Portfolio I. The project uses a small task-management console as the Week 1 foundation so the application has a clear object-oriented structure that can be expanded into additional REAPER system-management features during later milestones.
 
-The Week 1 build supports creating tasks, viewing current tasks, marking tasks complete, and safely exiting the program.
+The current Week 2 build supports creating tasks with Low, Medium, or High priority, viewing tasks by completion status, marking tasks complete, validating user input, and safely exiting the program.
+
+## Current Features
+
+- Add tasks with Low, Medium, or High priority.
+- View all tasks, active tasks, or completed tasks.
+- Mark tasks complete by task ID.
+- Reject invalid menu choices, bad numeric input, and blank task titles with clear retry prompts.
+- Keep task data, management logic, and console interaction separated across `Task`, `TaskManager`, and `UserInterface`.
+
+Week 2 verification details are recorded in `docs/WEEK2_TESTING.md`, and implementation changes are summarized in `CHANGELOG.md`.
 
 ## Repository Structure
 
