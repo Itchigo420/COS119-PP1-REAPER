@@ -4,6 +4,59 @@
 #include <limits>
 #include <string>
 
+namespace {
+
+bool hasVisibleText(const std::string& text) {
+    return text.find_first_not_of(" \t\r\n") != std::string::npos;
+}
+
+int readIntegerInRange(const std::string& prompt, int minimum, int maximum) {
+    while (true) {
+        std::cout << prompt;
+
+        int value = 0;
+        if (std::cin >> value) {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            if (value >= minimum && value <= maximum) {
+                return value;
+            }
+
+            std::cout << "Choose a number from " << minimum << " to "
+                      << maximum << ".\n";
+            continue;
+        }
+
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Enter a valid whole number.\n";
+    }
+}
+
+int readPositiveInteger(const std::string& prompt) {
+    while (true) {
+        std::cout << prompt;
+
+        int value = 0;
+        if (std::cin >> value) {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            if (value > 0) {
+                return value;
+            }
+
+            std::cout << "Enter a task ID greater than zero.\n";
+            continue;
+        }
+
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Enter a valid numeric task ID.\n";
+    }
+}
+
+}  // namespace
+
 UserInterface::UserInterface(TaskManager& manager) : manager_(manager) {}
 
 void UserInterface::run() {
@@ -25,9 +78,6 @@ void UserInterface::run() {
                 running = false;
                 std::cout << "REAPER session ended.\n";
                 break;
-            default:
-                std::cout << "Invalid option. Choose 1-4.\n";
-                break;
         }
     }
 }
@@ -37,36 +87,26 @@ void UserInterface::printMenu() const {
               << "1. Add task\n"
               << "2. View tasks\n"
               << "3. Complete task\n"
-              << "4. Exit\n"
-              << "Selection: ";
+              << "4. Exit\n";
 }
 
 void UserInterface::addTask() {
-    std::cout << "Task title: ";
     std::string title;
-    std::getline(std::cin, title);
+    while (true) {
+        std::cout << "Task title: ";
+        std::getline(std::cin, title);
 
-    if (title.empty()) {
-        std::cout << "Task title cannot be empty.\n";
-        return;
+        if (hasVisibleText(title)) {
+            break;
+        }
+
+        std::cout << "Task title cannot be empty or only whitespace. Try again.\n";
     }
 
-    std::cout << "Priority (1 = Low, 2 = Medium, 3 = High): ";
-    int priorityChoice = 0;
-    if (!(std::cin >> priorityChoice)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Enter a valid priority number.\n";
-        return;
-    }
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    if (priorityChoice < 1 || priorityChoice > 3) {
-        std::cout << "Priority must be 1, 2, or 3.\n";
-        return;
-    }
-
+    const int priorityChoice = readIntegerInRange(
+        "Priority (1 = Low, 2 = Medium, 3 = High): ", 1, 3);
     const Priority priority = static_cast<Priority>(priorityChoice);
+
     const int id = manager_.addTask(title, priority);
     std::cout << "Added task #" << id << " with "
               << priorityToString(priority) << " priority.\n";
@@ -74,7 +114,7 @@ void UserInterface::addTask() {
 
 void UserInterface::listTasks() const {
     if (manager_.empty()) {
-        std::cout << "No tasks yet.\n";
+        std::cout << "No tasks yet. Add a task first.\n";
         return;
     }
 
@@ -88,36 +128,20 @@ void UserInterface::listTasks() const {
 
 void UserInterface::completeTask() {
     if (manager_.empty()) {
-        std::cout << "No tasks to complete.\n";
+        std::cout << "No tasks to complete. Add a task first.\n";
         return;
     }
 
     listTasks();
-    std::cout << "Task ID to complete: ";
-
-    int id = 0;
-    if (!(std::cin >> id)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Enter a valid numeric task ID.\n";
-        return;
-    }
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    const int id = readPositiveInteger("Task ID to complete: ");
 
     if (manager_.completeTask(id)) {
         std::cout << "Task #" << id << " marked complete.\n";
     } else {
-        std::cout << "Task #" << id << " was not found.\n";
+        std::cout << "Task #" << id << " was not found. Check the list and try again.\n";
     }
 }
 
 int UserInterface::readMenuChoice() const {
-    int choice = 0;
-    if (!(std::cin >> choice)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return 0;
-    }
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    return choice;
+    return readIntegerInRange("Selection: ", 1, 4);
 }
