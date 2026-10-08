@@ -1,138 +1,60 @@
-> Use this worksheet to plan the next phase of your project **before you begin coding**.
-> Be clear, specific, and intentional—this will guide your development this week.
+# Milestone 2 - REAPER Task Console
 
----
-## 📌 Project Overview
+## Features Added
 
-**Project Name:**
-→ REAPER Task Console
+### Task Priority Levels
+Tasks now store a priority value using the `Priority` enum. When a task is created, the user selects Low, Medium, or High priority. The selected priority is stored in the `Task` object and displayed whenever tasks are listed.
 
-**What does your program currently do? (1–3 sentences)**
-→ The program currently lets the user add tasks, view the task list, mark tasks complete, and exit through a console menu. The program uses separate `Task`, `TaskManager`, and `UserInterface` classes with a `vector<Task>` to store task objects.
+### Improved Input Validation and Feedback
+The console now retries invalid input instead of immediately dropping the user back to the main menu. The Week 2 build handles:
 
----
-## 🔍 Current Progress Check
+- non-numeric menu input
+- menu values outside the valid range
+- empty or whitespace-only task titles
+- invalid priority selections
+- non-numeric and non-positive task IDs
+- task IDs that do not exist
 
-**What is working right now?**
-→ The main menu loop, task creation, task listing, task completion, basic numeric input validation, and class structure are working. The project also builds through the Visual Studio solution created in Week 1.
+The prompts explain what went wrong and what the user should enter next.
 
-**What is NOT working or incomplete?**
-→ Tasks do not currently have priority levels, the task list cannot be filtered by completion status, and some invalid input returns the user to the menu instead of giving them a clear retry prompt.
+### Task Status Filtering
+The View Tasks option now lets the user display all tasks, only active tasks, or only completed tasks. This keeps the task list easier to read as more tasks are added.
 
-**What feels confusing or messy in your code?**
-→ Input validation is spread across multiple UI functions. I want the interaction to be more consistent so every invalid entry gives the user a clear message and another chance to enter the correct value.
+## Code Structure Changes
 
----
-## 🚀 Feature Planning
+`Task` now stores a `Priority` value in addition to its ID, title, and completion state. A `priorityToString` helper converts the enum into readable console output.
 
-### Feature 1
-**Name:**
-→ Task Priority Levels
+`TaskManager` now accepts the priority value when it creates a task while continuing to own the `std::vector<Task>` collection and completion logic.
 
-**What does this feature do?**
-→ It allows each task to be assigned a Low, Medium, or High priority and displays that priority when tasks are listed.
+`UserInterface` contains the Week 2 interaction changes. Reusable input helpers centralize numeric validation, task-title validation rejects whitespace-only input, and task display logic can include active tasks, completed tasks, or both.
 
-**Why is this feature important?**
-→ Priority makes the task manager more useful because users can quickly see which work needs attention first.
+No new class was required because the existing separation between task data, task-management logic, and console interaction still fits the project scope.
 
----
-### Feature 2
-**Name:**
-→ Improved Input Validation and Feedback
+## Usability Improvements
 
-**What does this feature do?**
-→ It improves menu and task-entry validation, rejects whitespace-only task names, and gives clear retry instructions when the user enters an invalid value.
+The main usability improvement is consistent input validation with clear retry behavior. The user no longer has to restart an action because of a single bad numeric entry. Priority and filter choices are numbered, task output includes both completion state and priority, and error messages explain the expected input.
 
-**Why is this feature important?**
-→ This makes the console easier to understand and prevents unexpected input from creating confusing program behavior.
+These changes make the console easier to navigate without increasing the project scope beyond the task-management foundation.
 
----
-### Feature 3 (optional)
-**Name:**
-→ Task Status Filtering
+## What Changed and Why
 
-**What does this feature do?**
-→ It lets the user display all tasks, only active tasks, or only completed tasks.
+Week 1 established the basic add, view, complete, and exit workflow. Week 2 expands that foundation in three small, testable ways: priority adds useful task metadata, filtering makes task output easier to manage, and stronger validation improves reliability and usability.
 
-**Why is this feature important?**
-→ Filtering keeps the output readable as more tasks are added and helps the user focus on the information they need.
+The implementation intentionally stays within the existing `Task`, `TaskManager`, and `UserInterface` design instead of adding unnecessary classes or unrelated REAPER system features.
 
----
-## 🧩 System Design Updates
+## Testing
 
-**Will you need to create any new classes? If so, which ones?**
-→ No new class is required for the planned Week 2 features. The existing class responsibilities are already separated well enough for this stage of the project.
+The Week 2 build was compiled with CMake using C++17 and completed a manual test pass covering:
 
-**Will you modify any existing classes? How?**
-→ `Task` will store and report a priority value. `TaskManager` will accept priority when creating tasks and support status-based task access. `UserInterface` will collect the new input, display priority/status choices, and provide stronger validation and feedback.
+- invalid text at the main menu
+- invalid menu ranges
+- whitespace-only titles
+- invalid priority ranges
+- Low and High priority task creation
+- task completion
+- all-task filtering
+- active-task filtering
+- completed-task filtering
+- normal program exit
 
-**What data structures will you use (vectors, 2D vectors, etc.)?**
-→ The program will continue using `std::vector<Task>` as the main container because it fits the current number of tasks and supports simple iteration, filtering, and updates.
-
----## 🔄 Program Flow
-
-**Describe how a user interacts with your program:**
-
-1. Program starts → REAPER Task Console creates the task manager and displays the main menu.
-2. User chooses → The user selects an action such as adding, viewing, completing, or filtering tasks.
-3. Program responds → The program validates the input, updates the task collection when needed, and prints clear feedback/output.
-4. Loop/next step → The main menu returns after each action until the user chooses Exit.
-
----
-## 🎯 Usability Improvements
-
-How will you make your program easier to use this week?
-
-- Clearer prompts:
-→ Prompts will tell the user exactly what values are accepted, including numbered priority and status options.
-
-- Better error handling:
-→ Invalid menu choices, invalid task IDs, bad numeric input, and blank/whitespace-only task titles will produce helpful messages and allow the user to retry safely.
-
-- Improved menu/navigation:
-→ Menu options and task displays will stay consistently numbered and formatted, and status filtering will reduce clutter in longer task lists.
-
----
-## ⚠️ Potential Challenges
-
-**What do you think will be the hardest part this week?**
-→ The hardest part will be expanding the task data and UI behavior without making the existing class responsibilities messy or duplicating validation logic.
-
-**What is your plan if you get stuck?**
-→ I will test one feature at a time, use the debugger and compiler messages to isolate problems, review the course examples, and simplify/refactor the code before adding more functionality.
-
----
-## 📈 Level Up Goal
-
-**What skill are you focusing on improving this week?**
-→ Input validation and class design.
-
-**What will you do to improve it?**
-→ I will practice centralizing repeated validation behavior, test edge cases intentionally, review lecture/course examples, and use debugging to verify that each class is handling only its intended responsibility.
-
----
-## 🗓️ Task Breakdown (GitHub Issues Planning)
-
-List the tasks you plan to create as GitHub Issues:
-
-- [ ] Add task priority levels (#11)
-- [ ] Improve menu input validation and feedback (#12)
-- [ ] Add task status filtering (#13)
-- [ ] Test invalid input and edge cases (#6)
-
----
-## 🔥 Final Check
-
-Before you start coding, ask yourself:
-
-- [x] Do I know what I’m building this week?
-- [x] Do I know where to start?
-- [x] Did I break my work into small tasks?
-
-If yes → start coding 🚀
-If no → refine your plan first
-
----
-## 😈 Final Thought
-
-> Plan it now… or debug it later.
+The build completed successfully and the tested flows produced the expected console output.
