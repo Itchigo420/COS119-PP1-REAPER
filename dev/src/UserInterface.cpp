@@ -118,11 +118,43 @@ void UserInterface::listTasks() const {
         return;
     }
 
-    std::cout << "\nCurrent tasks:\n";
+    std::cout << "\nView tasks by status:\n"
+              << "1. All tasks\n"
+              << "2. Active tasks\n"
+              << "3. Completed tasks\n";
+
+    const int filterChoice = readIntegerInRange("Filter: ", 1, 3);
+
+    if (filterChoice == 1) {
+        printTasks(true, true);
+    } else if (filterChoice == 2) {
+        printTasks(true, false);
+    } else {
+        printTasks(false, true);
+    }
+}
+
+void UserInterface::printTasks(bool includeActive, bool includeCompleted) const {
+    bool foundMatch = false;
+
+    std::cout << "\nTasks:\n";
     for (const Task& task : manager_.getTasks()) {
+        const bool shouldShow =
+            (!task.isComplete() && includeActive) ||
+            (task.isComplete() && includeCompleted);
+
+        if (!shouldShow) {
+            continue;
+        }
+
+        foundMatch = true;
         std::cout << '[' << (task.isComplete() ? 'X' : ' ') << "] #"
                   << task.getId() << " [" << priorityToString(task.getPriority())
                   << "] - " << task.getTitle() << '\n';
+    }
+
+    if (!foundMatch) {
+        std::cout << "No tasks match this filter.\n";
     }
 }
 
