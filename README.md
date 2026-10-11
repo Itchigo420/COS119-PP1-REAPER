@@ -55,7 +55,13 @@ g++ -std=c++17 -Idev/include dev/src/*.cpp -o reaper
 
 ### Week 2
 
-My next stand-up will go here.
+**Overview:** This week I expanded the REAPER Task Console from the Week 1 foundation into a more usable task-management prototype. I focused on task priority, task filtering, stronger input validation, testing, and keeping the existing class structure organized.
+
+**Challenges:** The main challenge was improving the user flow without increasing the project scope too much. I also wanted invalid input to be handled consistently instead of forcing the user to restart an action.
+
+**Accomplishments:** I added Low, Medium, and High task priorities, filters for all, active, and completed tasks, and clearer retry behavior for invalid menu choices, blank task titles, priority values, and task IDs. I also completed a CMake build, documented the test cases, updated the Milestone 2 documentation, and closed the three Week 2 GitHub Issues.
+
+**Next Steps:** I plan to keep the project scope controlled, continue testing and refactoring as needed, and use the remaining backlog features only when they match the next course milestone requirements.
 
 ### Week 3
 
