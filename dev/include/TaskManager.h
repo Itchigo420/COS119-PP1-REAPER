@@ -7,7 +7,7 @@
 
 class TaskManager {
 public:
-    int addTask(const std::string& title);
+    int addTask(const std::string& title, Priority priority);
     bool completeTask(int id);
     const std::vector<Task>& getTasks() const;
     bool empty() const;

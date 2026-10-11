@@ -8,7 +8,17 @@ Dustin Summerour - Simulation Engineering student at Full Sail University.
 
 REAPER is a C++ console application being developed throughout Project & Portfolio I. The project uses a small task-management console as the Week 1 foundation so the application has a clear object-oriented structure that can be expanded into additional REAPER system-management features during later milestones.
 
-The Week 1 build supports creating tasks, viewing current tasks, marking tasks complete, and safely exiting the program.
+The current Week 2 build supports creating tasks with Low, Medium, or High priority, viewing tasks by completion status, marking tasks complete, validating user input, and safely exiting the program.
+
+## Current Features
+
+- Add tasks with Low, Medium, or High priority.
+- View all tasks, active tasks, or completed tasks.
+- Mark tasks complete by task ID.
+- Reject invalid menu choices, bad numeric input, and blank task titles with clear retry prompts.
+- Keep task data, management logic, and console interaction separated across `Task`, `TaskManager`, and `UserInterface`.
+
+Week 2 verification details are recorded in `docs/WEEK2_TESTING.md`, and implementation changes are summarized in `CHANGELOG.md`.
 
 ## Repository Structure
 
@@ -45,7 +55,13 @@ g++ -std=c++17 -Idev/include dev/src/*.cpp -o reaper
 
 ### Week 2
 
-My next stand-up will go here.
+**Overview:** This week I expanded the REAPER Task Console from the Week 1 foundation into a more usable task-management prototype. I focused on task priority, task filtering, stronger input validation, testing, and keeping the existing class structure organized.
+
+**Challenges:** The main challenge was improving the user flow without increasing the project scope too much. I also wanted invalid input to be handled consistently instead of forcing the user to restart an action.
+
+**Accomplishments:** I added Low, Medium, and High task priorities, filters for all, active, and completed tasks, and clearer retry behavior for invalid menu choices, blank task titles, priority values, and task IDs. I also completed a CMake build, documented the test cases, updated the Milestone 2 documentation, and closed the three Week 2 GitHub Issues.
+
+**Next Steps:** I plan to keep the project scope controlled, continue testing and refactoring as needed, and use the remaining backlog features only when they match the next course milestone requirements.
 
 ### Week 3
 
