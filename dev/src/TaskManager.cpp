@@ -5,14 +5,18 @@ int TaskManager::addTask(const std::string& title, Priority priority) {
     return nextId_++;
 }
 
-bool TaskManager::completeTask(int id) {
-    for (Task& task : tasks_) {
-        if (task.getId() == id) {
-            task.markComplete();
-            return true;
-        }
+CompleteTaskResult TaskManager::completeTask(int id) {
+    Task* task = findTaskById(id);
+    if (task == nullptr) {
+        return CompleteTaskResult::NotFound;
     }
-    return false;
+
+    if (task->isComplete()) {
+        return CompleteTaskResult::AlreadyComplete;
+    }
+
+    task->markComplete();
+    return CompleteTaskResult::Completed;
 }
 
 const std::vector<Task>& TaskManager::getTasks() const {
@@ -21,4 +25,14 @@ const std::vector<Task>& TaskManager::getTasks() const {
 
 bool TaskManager::empty() const {
     return tasks_.empty();
+}
+
+Task* TaskManager::findTaskById(int id) {
+    for (Task& task : tasks_) {
+        if (task.getId() == id) {
+            return &task;
+        }
+    }
+
+    return nullptr;
 }

@@ -167,10 +167,16 @@ void UserInterface::completeTask() {
     listTasks();
     const int id = readPositiveInteger("Task ID to complete: ");
 
-    if (manager_.completeTask(id)) {
-        std::cout << "Task #" << id << " marked complete.\n";
-    } else {
-        std::cout << "Task #" << id << " was not found. Check the list and try again.\n";
+    switch (manager_.completeTask(id)) {
+        case CompleteTaskResult::Completed:
+            std::cout << "Task #" << id << " marked complete.\n";
+            break;
+        case CompleteTaskResult::AlreadyComplete:
+            std::cout << "Task #" << id << " is already complete.\n";
+            break;
+        case CompleteTaskResult::NotFound:
+            std::cout << "Task #" << id << " was not found. Check the list and try again.\n";
+            break;
     }
 }
 
