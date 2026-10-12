@@ -96,4 +96,3 @@ I improved my code organization and pointer use by adding a safe non-owning `Tas
 ### Next Steps
 
 For Week 4, my primary goal is file save/load support so tasks persist between sessions, followed by final cleanup, verification, and submission preparation.
-

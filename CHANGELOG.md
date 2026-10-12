@@ -27,4 +27,3 @@
 - Added a cross-platform processor/memory System Status screen.
 - Added automated CTest regression coverage and expanded integration testing.
 - Added Milestone 3 design/refactoring documentation and Week 3 testing notes.
-
