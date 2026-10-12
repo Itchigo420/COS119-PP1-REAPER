@@ -10,6 +10,7 @@ add_executable(reaper
     src/Task.cpp
     src/TaskManager.cpp
     src/UserInterface.cpp
+    src/SystemMonitor.cpp
 )
 
 target_include_directories(reaper PRIVATE include)

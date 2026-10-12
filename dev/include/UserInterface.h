@@ -15,5 +15,6 @@ private:
     void listTasks() const;
     void printTasks(bool includeActive, bool includeCompleted) const;
     void completeTask();
+    void showSystemStatus() const;
     int readMenuChoice() const;
 };

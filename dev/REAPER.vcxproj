@@ -78,11 +78,13 @@
     <ClCompile Include="src\Task.cpp" />
     <ClCompile Include="src\TaskManager.cpp" />
     <ClCompile Include="src\UserInterface.cpp" />
+    <ClCompile Include="src\SystemMonitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Task.h" />
     <ClInclude Include="include\TaskManager.h" />
     <ClInclude Include="include\UserInterface.h" />
+    <ClInclude Include="include\SystemMonitor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

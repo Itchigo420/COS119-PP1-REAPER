@@ -1,5 +1,7 @@
 #include "UserInterface.h"
+#include "SystemMonitor.h"
 
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <string>
@@ -75,6 +77,9 @@ void UserInterface::run() {
                 completeTask();
                 break;
             case 4:
+                showSystemStatus();
+                break;
+            case 5:
                 running = false;
                 std::cout << "REAPER session ended.\n";
                 break;
@@ -90,7 +95,8 @@ void UserInterface::printMenu() const {
               << "1. Add task\n"
               << "2. View tasks\n"
               << "3. Complete task\n"
-              << "4. Exit\n";
+              << "4. System status\n"
+              << "5. Exit\n";
 }
 
 void UserInterface::addTask() {
@@ -176,6 +182,28 @@ void UserInterface::completeTask() {
     }
 }
 
+void UserInterface::showSystemStatus() const {
+    const SystemSnapshot snapshot = SystemMonitor{}.capture();
+
+    std::cout << "\n=== REAPER System Status ===\n";
+    if (snapshot.logicalProcessorCount > 0) {
+        std::cout << "Logical processors: " << snapshot.logicalProcessorCount << '\n';
+    } else {
+        std::cout << "Logical processors: unavailable\n";
+    }
+
+    if (snapshot.totalMemoryBytes > 0) {
+        std::cout << "Physical memory: "
+                  << SystemMonitor::formatBytes(snapshot.totalMemoryBytes) << " total\n"
+                  << "Available memory: "
+                  << SystemMonitor::formatBytes(snapshot.availableMemoryBytes) << '\n'
+                  << "Memory used: " << std::fixed << std::setprecision(1)
+                  << snapshot.memoryUsedPercent() << "%\n" << std::defaultfloat;
+    } else {
+        std::cout << "Physical memory: unavailable on this platform\n";
+    }
+}
+
 int UserInterface::readMenuChoice() const {
-    return readIntegerInRange("Selection: ", 1, 4);
+    return readIntegerInRange("Selection: ", 1, 5);
 }
