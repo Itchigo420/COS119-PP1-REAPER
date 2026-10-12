@@ -14,3 +14,13 @@ add_executable(reaper
 )
 
 target_include_directories(reaper PRIVATE include)
+
+enable_testing()
+add_executable(reaper_tests
+    tests/TaskManagerTests.cpp
+    src/Task.cpp
+    src/TaskManager.cpp
+    src/SystemMonitor.cpp
+)
+target_include_directories(reaper_tests PRIVATE include)
+add_test(NAME reaper_task_manager_tests COMMAND reaper_tests)
