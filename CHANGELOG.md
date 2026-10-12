@@ -17,3 +17,13 @@
 ### Verified
 - CMake C++17 build completed successfully.
 - Manual console testing covered priority creation, completion, filtering, invalid input, and exit behavior.
+
+## Week 3 - Refinement and System Status
+
+- Refactored task lookup and completion feedback.
+- Added safe non-owning pointer use in `TaskManager`.
+- Added total, active, and completed task counts.
+- Added High-to-Low priority ordering.
+- Added a cross-platform processor/memory System Status screen.
+- Added automated CTest regression coverage and expanded integration testing.
+- Added Milestone 3 design/refactoring documentation and Week 3 testing notes.

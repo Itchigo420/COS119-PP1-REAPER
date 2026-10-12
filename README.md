@@ -70,3 +70,29 @@ My Week 3 stand-up will go here.
 ### Week 4
 
 My final stand-up will go here.
+
+## Week 3 Stand-Up
+
+### Overview
+
+This week I focused on refining the REAPER task console instead of expanding the project too far. I improved the task-management core, added a small system-status feature, and added repeatable regression testing.
+
+### Improvements
+
+I refactored task lookup and completion so `TaskManager` owns the decision logic and can distinguish completed, already-complete, and missing task IDs. I added task totals, active/completed counts, High-to-Low priority ordering, and a `SystemMonitor` component that reports logical processors and physical-memory usage.
+
+### Challenges
+
+The main challenge was adding system monitoring without turning the four-week course project into the full REAPER platform. I kept the feature intentionally narrow and separated platform-specific monitoring code from the task-management and UI classes. I also tested several bad-input paths to make sure the refactor did not break the existing console flow.
+
+### Feedback
+
+Earlier instructor feedback emphasized keeping the project scope under control and building a few monitoring features thoroughly. I used that feedback by keeping the task manager as the foundation and adding only a focused processor/memory snapshot this week.
+
+### Accomplishments
+
+I improved my code organization and pointer use by adding a safe non-owning `Task*` lookup helper rather than using manual dynamic allocation. I also added CTest coverage, and the Week 3 build passes all automated tests with warnings enabled.
+
+### Next Steps
+
+For Week 4, my primary goal is file save/load support so tasks persist between sessions, followed by final cleanup, verification, and submission preparation.

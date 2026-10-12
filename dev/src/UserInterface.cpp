@@ -1,5 +1,7 @@
 #include "UserInterface.h"
+#include "SystemMonitor.h"
 
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <string>
@@ -75,6 +77,9 @@ void UserInterface::run() {
                 completeTask();
                 break;
             case 4:
+                showSystemStatus();
+                break;
+            case 5:
                 running = false;
                 std::cout << "REAPER session ended.\n";
                 break;
@@ -84,10 +89,14 @@ void UserInterface::run() {
 
 void UserInterface::printMenu() const {
     std::cout << "\n=== REAPER Task Console ===\n"
+              << "Tasks: " << manager_.totalCount() << " total | "
+              << manager_.activeCount() << " active | "
+              << manager_.completedCount() << " complete\n"
               << "1. Add task\n"
               << "2. View tasks\n"
               << "3. Complete task\n"
-              << "4. Exit\n";
+              << "4. System status\n"
+              << "5. Exit\n";
 }
 
 void UserInterface::addTask() {
@@ -135,26 +144,19 @@ void UserInterface::listTasks() const {
 }
 
 void UserInterface::printTasks(bool includeActive, bool includeCompleted) const {
-    bool foundMatch = false;
+    const std::vector<const Task*> tasks =
+        manager_.getTasksByPriority(includeActive, includeCompleted);
 
-    std::cout << "\nTasks:\n";
-    for (const Task& task : manager_.getTasks()) {
-        const bool shouldShow =
-            (!task.isComplete() && includeActive) ||
-            (task.isComplete() && includeCompleted);
-
-        if (!shouldShow) {
-            continue;
-        }
-
-        foundMatch = true;
-        std::cout << '[' << (task.isComplete() ? 'X' : ' ') << "] #"
-                  << task.getId() << " [" << priorityToString(task.getPriority())
-                  << "] - " << task.getTitle() << '\n';
+    std::cout << "\nTasks (High to Low priority):\n";
+    if (tasks.empty()) {
+        std::cout << "No tasks match this filter.\n";
+        return;
     }
 
-    if (!foundMatch) {
-        std::cout << "No tasks match this filter.\n";
+    for (const Task* task : tasks) {
+        std::cout << '[' << (task->isComplete() ? 'X' : ' ') << "] #"
+                  << task->getId() << " [" << priorityToString(task->getPriority())
+                  << "] - " << task->getTitle() << '\n';
     }
 }
 
@@ -167,13 +169,41 @@ void UserInterface::completeTask() {
     listTasks();
     const int id = readPositiveInteger("Task ID to complete: ");
 
-    if (manager_.completeTask(id)) {
-        std::cout << "Task #" << id << " marked complete.\n";
+    switch (manager_.completeTask(id)) {
+        case CompleteTaskResult::Completed:
+            std::cout << "Task #" << id << " marked complete.\n";
+            break;
+        case CompleteTaskResult::AlreadyComplete:
+            std::cout << "Task #" << id << " is already complete.\n";
+            break;
+        case CompleteTaskResult::NotFound:
+            std::cout << "Task #" << id << " was not found. Check the list and try again.\n";
+            break;
+    }
+}
+
+void UserInterface::showSystemStatus() const {
+    const SystemSnapshot snapshot = SystemMonitor{}.capture();
+
+    std::cout << "\n=== REAPER System Status ===\n";
+    if (snapshot.logicalProcessorCount > 0) {
+        std::cout << "Logical processors: " << snapshot.logicalProcessorCount << '\n';
     } else {
-        std::cout << "Task #" << id << " was not found. Check the list and try again.\n";
+        std::cout << "Logical processors: unavailable\n";
+    }
+
+    if (snapshot.totalMemoryBytes > 0) {
+        std::cout << "Physical memory: "
+                  << SystemMonitor::formatBytes(snapshot.totalMemoryBytes) << " total\n"
+                  << "Available memory: "
+                  << SystemMonitor::formatBytes(snapshot.availableMemoryBytes) << '\n'
+                  << "Memory used: " << std::fixed << std::setprecision(1)
+                  << snapshot.memoryUsedPercent() << "%\n" << std::defaultfloat;
+    } else {
+        std::cout << "Physical memory: unavailable on this platform\n";
     }
 }
 
 int UserInterface::readMenuChoice() const {
-    return readIntegerInRange("Selection: ", 1, 4);
+    return readIntegerInRange("Selection: ", 1, 5);
 }

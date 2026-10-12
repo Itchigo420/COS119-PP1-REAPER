@@ -15,10 +15,12 @@
     <ClCompile Include="src\Task.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="src\TaskManager.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="src\UserInterface.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\SystemMonitor.cpp"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Task.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="include\TaskManager.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="include\UserInterface.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="include\SystemMonitor.h"><Filter>Header Files</Filter></ClInclude>
   </ItemGroup>
 </Project>
