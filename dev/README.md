@@ -1,18 +1,20 @@
 # REAPER Development
 
-The Week 1 C++ implementation lives in this directory.
+The current PP1 C++ implementation lives in this directory.
 
 ## Layout
 
 - `include/Task.h` - task model
 - `include/TaskManager.h` - task collection and operations
 - `include/UserInterface.h` - console interface
+- `include/SystemMonitor.h` - focused processor/memory monitoring interface
 - `src/` - class implementations and `main.cpp`
-- `CMakeLists.txt` - CMake build configuration
+- `tests/` - regression tests for task-management and monitoring behavior
+- `CMakeLists.txt` - CMake build and CTest configuration
 
 ## Build with Visual Studio
 
-Open `REAPER.sln` in Visual Studio and build the `Debug|x64` or `Release|x64` configuration. The solution includes all Week 1 source and header files.
+Open `REAPER.sln` in Visual Studio and build the `Debug|x64` or `Release|x64` configuration. The solution includes the current source and header files used by the project.
 
 ## Build with CMake
 
