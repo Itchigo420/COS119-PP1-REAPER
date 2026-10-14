@@ -47,3 +47,25 @@ The C++ regression test verifies task IDs, task counts, priority ordering, compl
 ## Observed System Snapshot
 
 On the REAPER development host during testing, the System Status screen successfully reported logical processor count and physical-memory statistics. Values are collected at runtime, so they will change between systems and runs.
+
+## Instructor Feedback Follow-Up: getline + stoi Validation
+
+After Week 3 instructor feedback, numeric console input was refactored to use the Day 3 lecture approach: `std::getline()` reads the complete line, `std::stoi()` performs conversion, and `try/catch` handles `std::invalid_argument` and `std::out_of_range` failures. The previous `std::cin >>` / `clear()` / `ignore()` numeric-input pattern was removed.
+
+The parser also verifies that the entire trimmed input was consumed, so values such as `2abc` and `2.5` are rejected instead of being partially accepted. Leading and trailing whitespace around an otherwise valid whole number is allowed.
+
+Additional unusual-input checks:
+
+| Input | Expected behavior | Result |
+|---|---|---|
+| `abc` | Reject as non-numeric | Pass |
+| `2abc` | Reject mixed numeric/text input | Pass |
+| `2.5` | Reject decimal input where a whole number is required | Pass |
+| Blank numeric input | Reject and reprompt | Pass |
+| Very large integer | Catch `std::out_of_range` and reprompt | Pass |
+| Menu `0` / `6` | Reject outside the 1-5 range | Pass |
+| Priority `0` / `4` | Reject outside the 1-3 range | Pass |
+| Task ID `0` / `-1` | Reject because IDs must be positive | Pass |
+| `  2  ` | Accept valid number with surrounding whitespace | Pass |
+
+A source search after the refactor confirmed there are no remaining `std::cin >>`, `std::cin.clear()`, or `std::cin.ignore()` calls in `dev/src` or `dev/include`.

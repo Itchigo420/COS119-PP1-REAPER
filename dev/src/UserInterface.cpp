@@ -3,7 +3,7 @@
 
 #include <iomanip>
 #include <iostream>
-#include <limits>
+#include <stdexcept>
 #include <string>
 
 namespace {
@@ -12,13 +12,37 @@ bool hasVisibleText(const std::string& text) {
     return text.find_first_not_of(" \t\r\n") != std::string::npos;
 }
 
+std::string trimWhitespace(const std::string& text) {
+    const std::size_t first = text.find_first_not_of(" \t\r\n");
+    if (first == std::string::npos) {
+        return {};
+    }
+
+    const std::size_t last = text.find_last_not_of(" \t\r\n");
+    return text.substr(first, last - first + 1);
+}
+
+int parseWholeNumber(const std::string& input) {
+    const std::string cleanedInput = trimWhitespace(input);
+    std::size_t parsedCharacters = 0;
+    const int value = std::stoi(cleanedInput, &parsedCharacters);
+
+    if (parsedCharacters != cleanedInput.size()) {
+        throw std::invalid_argument("unexpected characters");
+    }
+
+    return value;
+}
+
 int readIntegerInRange(const std::string& prompt, int minimum, int maximum) {
     while (true) {
         std::cout << prompt;
 
-        int value = 0;
-        if (std::cin >> value) {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::string input;
+        std::getline(std::cin, input);
+
+        try {
+            const int value = parseWholeNumber(input);
 
             if (value >= minimum && value <= maximum) {
                 return value;
@@ -26,12 +50,11 @@ int readIntegerInRange(const std::string& prompt, int minimum, int maximum) {
 
             std::cout << "Choose a number from " << minimum << " to "
                       << maximum << ".\n";
-            continue;
+        } catch (const std::invalid_argument&) {
+            std::cout << "Enter a valid whole number.\n";
+        } catch (const std::out_of_range&) {
+            std::cout << "That number is too large. Try again.\n";
         }
-
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Enter a valid whole number.\n";
     }
 }
 
@@ -39,21 +62,22 @@ int readPositiveInteger(const std::string& prompt) {
     while (true) {
         std::cout << prompt;
 
-        int value = 0;
-        if (std::cin >> value) {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::string input;
+        std::getline(std::cin, input);
+
+        try {
+            const int value = parseWholeNumber(input);
 
             if (value > 0) {
                 return value;
             }
 
             std::cout << "Enter a task ID greater than zero.\n";
-            continue;
+        } catch (const std::invalid_argument&) {
+            std::cout << "Enter a valid numeric task ID.\n";
+        } catch (const std::out_of_range&) {
+            std::cout << "That task ID is too large. Try again.\n";
         }
-
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Enter a valid numeric task ID.\n";
     }
 }
 

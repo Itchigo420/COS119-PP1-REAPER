@@ -89,3 +89,7 @@ The largest Week 3 change was moving more responsibility out of the console UI a
 ## Remaining Scope
 
 File save/load remains planned for Week 4. The broader system-monitoring concept (CPU load, storage, network, services, and additional management features) remains in the backlog rather than being forced into Milestone 3.
+
+## Instructor Feedback Follow-Up
+
+After instructor feedback on input validation, I replaced the remaining numeric `std::cin >>` input with a `getline + stoi + try/catch` workflow from the Day 3 lecture. The updated parser reads a full line, trims surrounding whitespace, rejects partial conversions such as `2abc` and `2.5`, catches invalid and out-of-range conversions, and then applies the menu, priority, or task-ID range rules. I retested normal and unusual inputs after the change and the existing CTest regression suite still passes.
