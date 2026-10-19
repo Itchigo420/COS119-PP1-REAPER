@@ -1,5 +1,15 @@
 # Changelog
 
+## Week 4 — Final delivery (October 19, 2026)
+
+- Added versioned save/load persistence with TaskStorage and safe file replacement.
+- Added transactional TaskManager restoration and next-ID consistency.
+- Added safe handling of file problems and unexpected terminal EOF.
+- Updated both Visual Studio project metadata and CMake build targets.
+- Added persistence unit tests and console integration tests.
+- Verified 3/3 CTest suites pass with warnings enabled.
+- Updated final delivery documentation, GitHub Issue tracking, and terminal evidence.
+
 ## Week 2 - Milestone 2
 
 ### Added
