@@ -1,9 +1,10 @@
 #include "TaskManager.h"
 #include "UserInterface.h"
 
-int main() {
+int main(int argc, char* argv[]) {
     TaskManager manager;
-    UserInterface ui(manager);
+    const std::string taskFile = argc > 1 ? argv[1] : "reaper-tasks.txt";
+    UserInterface ui(manager, taskFile);
     ui.run();
     return 0;
 }

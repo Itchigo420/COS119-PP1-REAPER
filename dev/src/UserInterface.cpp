@@ -1,8 +1,11 @@
 #include "UserInterface.h"
 #include "SystemMonitor.h"
+#include "TaskStorage.h"
 
 #include <iomanip>
 #include <iostream>
+#include <optional>
+#include <utility>
 #include <stdexcept>
 #include <string>
 
@@ -34,12 +37,14 @@ int parseWholeNumber(const std::string& input) {
     return value;
 }
 
-int readIntegerInRange(const std::string& prompt, int minimum, int maximum) {
+std::optional<int> readIntegerInRange(const std::string& prompt, int minimum, int maximum) {
     while (true) {
         std::cout << prompt;
 
         std::string input;
-        std::getline(std::cin, input);
+        if (!std::getline(std::cin, input)) {
+            return std::nullopt;
+        }
 
         try {
             const int value = parseWholeNumber(input);
@@ -58,12 +63,14 @@ int readIntegerInRange(const std::string& prompt, int minimum, int maximum) {
     }
 }
 
-int readPositiveInteger(const std::string& prompt) {
+std::optional<int> readPositiveInteger(const std::string& prompt) {
     while (true) {
         std::cout << prompt;
 
         std::string input;
-        std::getline(std::cin, input);
+        if (!std::getline(std::cin, input)) {
+            return std::nullopt;
+        }
 
         try {
             const int value = parseWholeNumber(input);
@@ -83,14 +90,27 @@ int readPositiveInteger(const std::string& prompt) {
 
 }  // namespace
 
-UserInterface::UserInterface(TaskManager& manager) : manager_(manager) {}
+UserInterface::UserInterface(TaskManager& manager, std::string dataFile)
+    : manager_(manager), dataFile_(std::move(dataFile)) {}
 
 void UserInterface::run() {
-    bool running = true;
+    std::string message;
+    const LoadResult result = TaskStorage::load(dataFile_, manager_, message);
+    std::cout << message << '\n';
+    const bool saveIsSafe = result != LoadResult::Error;
+    if (!saveIsSafe) {
+        std::cout << "Existing task file will not be overwritten.\n";
+    }
 
+    bool running = true;
     while (running) {
         printMenu();
-        switch (readMenuChoice()) {
+        const std::optional<int> choice = readMenuChoice();
+        if (!choice) {
+            std::cout << "Input closed; ending REAPER session.\n";
+            break;
+        }
+        switch (*choice) {
             case 1:
                 addTask();
                 break;
@@ -108,6 +128,16 @@ void UserInterface::run() {
                 std::cout << "REAPER session ended.\n";
                 break;
         }
+    }
+    if (saveIsSafe) {
+        if (!TaskStorage::save(dataFile_, manager_, message)) {
+            std::cerr << "WARNING: " << message << '\n';
+        } else {
+            std::cout << message << '\n';
+        }
+    } else {
+        std::cerr << "WARNING: Changes in this session were not saved because "
+                     "the original task file could not be loaded safely.\n";
     }
 }
 
@@ -127,8 +157,9 @@ void UserInterface::addTask() {
     std::string title;
     while (true) {
         std::cout << "Task title: ";
-        std::getline(std::cin, title);
-
+        if (!std::getline(std::cin, title)) {
+            return;
+        }
         if (hasVisibleText(title)) {
             break;
         }
@@ -136,9 +167,12 @@ void UserInterface::addTask() {
         std::cout << "Task title cannot be empty or only whitespace. Try again.\n";
     }
 
-    const int priorityChoice = readIntegerInRange(
+    const std::optional<int> priorityChoice = readIntegerInRange(
         "Priority (1 = Low, 2 = Medium, 3 = High): ", 1, 3);
-    const Priority priority = static_cast<Priority>(priorityChoice);
+    if (!priorityChoice) {
+        return;
+    }
+    const Priority priority = static_cast<Priority>(*priorityChoice);
 
     const int id = manager_.addTask(title, priority);
     std::cout << "Added task #" << id << " with "
@@ -156,11 +190,14 @@ void UserInterface::listTasks() const {
               << "2. Active tasks\n"
               << "3. Completed tasks\n";
 
-    const int filterChoice = readIntegerInRange("Filter: ", 1, 3);
+    const std::optional<int> filterChoice = readIntegerInRange("Filter: ", 1, 3);
+    if (!filterChoice) {
+        return;
+    }
 
-    if (filterChoice == 1) {
+    if (*filterChoice == 1) {
         printTasks(true, true);
-    } else if (filterChoice == 2) {
+    } else if (*filterChoice == 2) {
         printTasks(true, false);
     } else {
         printTasks(false, true);
@@ -191,17 +228,20 @@ void UserInterface::completeTask() {
     }
 
     listTasks();
-    const int id = readPositiveInteger("Task ID to complete: ");
+    const std::optional<int> id = readPositiveInteger("Task ID to complete: ");
+    if (!id) {
+        return;
+    }
 
-    switch (manager_.completeTask(id)) {
+    switch (manager_.completeTask(*id)) {
         case CompleteTaskResult::Completed:
-            std::cout << "Task #" << id << " marked complete.\n";
+            std::cout << "Task #" << *id << " marked complete.\n";
             break;
         case CompleteTaskResult::AlreadyComplete:
-            std::cout << "Task #" << id << " is already complete.\n";
+            std::cout << "Task #" << *id << " is already complete.\n";
             break;
         case CompleteTaskResult::NotFound:
-            std::cout << "Task #" << id << " was not found. Check the list and try again.\n";
+            std::cout << "Task #" << *id << " was not found. Check the list and try again.\n";
             break;
     }
 }
@@ -228,6 +268,6 @@ void UserInterface::showSystemStatus() const {
     }
 }
 
-int UserInterface::readMenuChoice() const {
+std::optional<int> UserInterface::readMenuChoice() const {
     return readIntegerInRange("Selection: ", 1, 5);
 }

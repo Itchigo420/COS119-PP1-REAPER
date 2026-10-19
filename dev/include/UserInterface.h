@@ -2,13 +2,17 @@
 
 #include "TaskManager.h"
 
+#include <optional>
+#include <string>
+
 class UserInterface {
 public:
-    explicit UserInterface(TaskManager& manager);
+    explicit UserInterface(TaskManager& manager, std::string dataFile = "reaper-tasks.txt");
     void run();
 
 private:
     TaskManager& manager_;
+    std::string dataFile_;
 
     void printMenu() const;
     void addTask();
@@ -16,5 +20,5 @@ private:
     void printTasks(bool includeActive, bool includeCompleted) const;
     void completeTask();
     void showSystemStatus() const;
-    int readMenuChoice() const;
+    std::optional<int> readMenuChoice() const;
 };
