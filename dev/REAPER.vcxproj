@@ -77,12 +77,14 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Task.cpp" />
     <ClCompile Include="src\TaskManager.cpp" />
+    <ClCompile Include="src\TaskStorage.cpp" />
     <ClCompile Include="src\UserInterface.cpp" />
     <ClCompile Include="src\SystemMonitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Task.h" />
     <ClInclude Include="include\TaskManager.h" />
+    <ClInclude Include="include\TaskStorage.h" />
     <ClInclude Include="include\UserInterface.h" />
     <ClInclude Include="include\SystemMonitor.h" />
   </ItemGroup>

@@ -8,7 +8,7 @@ Dustin Summerour - Simulation Engineering student at Full Sail University.
 
 REAPER is a C++ console application being developed throughout Project & Portfolio I. The project uses a small task-management console as the Week 1 foundation so the application has a clear object-oriented structure that can be expanded into additional REAPER system-management features during later milestones.
 
-The current Week 3 build supports prioritized task management, status filtering, safe task completion, task summaries, High-to-Low sorting, focused processor/memory system monitoring, regression testing, and robust `getline + stoi + try/catch` input validation.
+The final Week 4 build supports prioritized task management, status filtering, safe task completion, task summaries, High-to-Low sorting, focused processor/memory monitoring, robust `getline + stoi + try/catch` validation, and versioned save/load persistence across sessions.
 
 ## Current Features
 
@@ -18,14 +18,17 @@ The current Week 3 build supports prioritized task management, status filtering,
 - Display task totals and sort tasks from High to Low priority.
 - Display a focused system-status snapshot for logical processors and physical memory.
 - Reject invalid, partial, decimal, oversized, and out-of-range numeric input using `getline`, `stoi`, and exception handling.
-- Keep task data, management logic, system monitoring, and console interaction separated across focused classes.
+- Keep task data, management logic, system monitoring, persistence, and console interaction separated across focused classes.
+- Save and reload task IDs, priorities, titles, and completion states between console sessions.
+- Reject corrupt save files without overwriting them; end cleanly if terminal input closes.
 
-Week 3 verification details are recorded in `docs/WEEK3_TESTING.md`, and implementation changes are summarized in `CHANGELOG.md`.
+Week 4 verification details are recorded in `docs/WEEK4_TESTING.md`, with final design/delivery details in `docs/Milestone4.md` and release notes in `CHANGELOG.md`.
 
 ## Repository Structure
 
-- `dev/` - C++ source code and build configuration
-- `docs/` - course documentation and milestone planning
+- `dev/` - C++ source, Visual Studio / CMake builds, and automated tests
+- `docs/` - course documentation, milestones, tests, dated Week 4 drafts
+- `images/` - verified final build and application proof images
 - `README.md` - project overview and weekly stand-ups
 
 ## Build
@@ -35,6 +38,7 @@ The source uses C++17 and can be built with CMake or a C++17 compiler.
 ```bash
 cmake -S dev -B build
 cmake --build build
+ctest --test-dir build --output-on-failure
 ```
 
 Or with g++:
@@ -42,6 +46,9 @@ Or with g++:
 ```bash
 g++ -std=c++17 -Idev/include dev/src/*.cpp -o reaper
 ```
+
+## Persistence
+Tasks are stored in `reaper-tasks.txt` in the current working directory and loaded on the next start. The path can be changed by supplying a file path argument (for example `./build/reaper ./tasks.txt`). The runtime data file is ignored by Git. Invalid save files are not overwritten automatically.
 
 ## Weekly Stand Up
 
@@ -86,5 +93,12 @@ g++ -std=c++17 -Idev/include dev/src/*.cpp -o reaper
 
 
 ### Week 4
+**Overview:** This week I focused on delivering a stable version of REAPER instead of expanding its scope. I finished task save/load, reviewed the console flow, and ran final verification.
 
-Final stand-up will be added after the Week 4 milestone is complete.
+**Project Wrap-Up:** The finished C++ console now supports task priorities, task filters, completion status, sorted lists, task counts, a focused CPU/memory snapshot, and persistence between runs. I separated the file I/O code into a TaskStorage component, strengthened TaskManager's object/data-structure handling, updated Visual Studio and CMake files, and documented the final tests.
+
+**Challenges:** A major challenge was preserving task IDs and states safely while protecting existing data if a save file is corrupted. I solved this by validating the complete restored task list before changing live data and avoiding overwrites when loading fails. Another challenge was handling unexpected end-of-input; the menu now exits cleanly instead of looping.
+
+**Biggest Takeaway:** I improved at keeping C++ class responsibilities separate, validating assumptions, testing edge cases, and using GitHub Issues/PRs to track actual development. A smaller, verified application is more useful than a giant unfinished feature list.
+
+**Future Development:** Outside this course, I'd expand REAPER with more system diagnostics, service health monitoring, and secure integration with the larger REAPER platform. Those ideas are intentionally left in Backlog rather than being misrepresented as finished.

@@ -454,3 +454,8 @@ FodyWeavers.xsd
 *.vsidx
 *.vs
 .DS_Store
+
+# REAPER local runtime task data (never commit personal task lists)
+reaper-tasks.txt
+reaper-tasks.txt.tmp
+reaper-tasks.txt.bak

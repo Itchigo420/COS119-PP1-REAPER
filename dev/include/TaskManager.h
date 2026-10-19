@@ -23,6 +23,10 @@ public:
     std::size_t completedCount() const;
     bool empty() const;
 
+    // Validate the full set before replacing any live tasks.
+    // This preserves task IDs and keeps the next generated ID unique.
+    bool restoreTasks(const std::vector<Task>& savedTasks, std::string& error);
+
 private:
     Task* findTaskById(int id);
 
