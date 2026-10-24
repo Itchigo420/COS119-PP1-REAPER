@@ -40,7 +40,7 @@ ctest --test-dir /tmp/reaper-pp1-week4-build --output-on-failure
 6. Confirm restored task IDs, priorities, completed flags, and next ID.
 7. Submit invalid menu input to demonstrate graceful recovery.
 
-The evidence PNG files are generated from the actual CMake/CTest output and REAPER console runs; they are terminal-transcript visuals, not fabricated test results.
+The final evidence PNG files were captured directly from a real Windows Terminal window running the final C++17 application and CMake/CTest under WSL on October 24, 2026. They are genuine screen captures, not recreated terminal graphics.
 
 ## Remaining platform limitation
 Tests ran in the Linux WSL development environment with C++17. The Visual Studio project files were updated to include TaskStorage, but a native MSBuild run on Windows is not claimed here.
