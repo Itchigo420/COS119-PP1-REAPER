@@ -41,7 +41,7 @@ On Windows, open `dev/REAPER.sln` in Visual Studio with C++17 support or run the
 - Three CTest checks pass: original TaskManager/SystemMonitor tests, new persistence round-trip tests, and console integration tests.
 - Verified missing files, multiple session restarts, completed-state restoration, ID continuity, malformed data, bad inputs, and EOF.
 - Test details: `docs/WEEK4_TESTING.md`
-- Proof images: `images/final-build.png`, `images/final-run.png`, `images/final-features.png`.
+- Genuine Windows Terminal screenshots: `images/final-build.png` (compile/link/CTest), `images/final-run.png` (task operations and priorities), `images/final-features.png` (completion, system status, persistence). Captured directly October 24, 2026.
 
 ## Issue tracking and delivery
 Week 4 work is tracked in #4 (save/load) and #23–#25 (safe task restoration, console reliability, persistence tests). Optional monitoring expansion #3 stays in Backlog. Completed development Issues should be Done on the established Project board.
